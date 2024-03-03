@@ -13,7 +13,8 @@ num_list = [126,48,109,51,91,95,112,127,123]
 for i in range (len(port)):
     GPIO.setup(port[i], GPIO.OUT)
 while(1):
-   num =  num_list[2]
+   num = int(input()) 
+   num =  num_list[num]
    y = dec2bin(num)
    for i in range (len(y)):
        GPIO.output(port[i], y[i])
