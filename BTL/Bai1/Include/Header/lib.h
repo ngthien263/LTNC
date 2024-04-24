@@ -15,6 +15,9 @@
 #define LCD_RS	0
 #define LCD_RW	1
 #define LCD_E	2
+extern char rows_pin[6];
+extern char cols_pin[4];
+extern char keypad[6][4];
 void LCD_command(unsigned char command);
 void LCD_data(unsigned char data);
 void LCD_init() ;
@@ -23,9 +26,7 @@ void LCD_gotoxy(unsigned char x, unsigned char y);
 void LCD_print(const char *str);
 char getkey();
 void char_to_string(char c, char *str);
-extern char rows_pin[6];
-extern char cols_pin[4];
-extern int keypad[6][4];
-
+int string_to_int(char *str);
+void add_to_string(char a, char *str);
 
 #endif /* LIB_H_ */

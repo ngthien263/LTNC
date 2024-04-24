@@ -1,11 +1,17 @@
 #include <lib.h>
 char rows_pin[6] = {0, 1, 2, 3, 4, 5};
 char cols_pin[4] = {0, 1, 2, 3};
-int keypad[6][4] = {{'0', '1', '2', '3'},{'0', '1', '2', '3'},{'0', '1', '2', '3'},{'0', '1', '2', '3'},{'0', '1', '2', '3'},{'0', '1', '2', '3'}};
+char keypad[6][4] = {
+					{'a', 'b', 'c', 'd'},
+					{'C', 'e', '%', 'f'},
+					{'7', '8', '9', '/'},
+					{'4', '5', '6', '*'},
+					{'1', '2', '3', '-'},
+					{'0', '.', '=', '+'}};
 
 void LCD_command(unsigned char command) {
-	LCD_CONTROL_PORTD &= ~(1 << LCD_RS);//RS xuong 0 de ghi lenh
-	LCD_CONTROL_PORTD &= ~(1 << LCD_RW);//RW xuong 0 de ghi lenh
+	LCD_CONTROL_PORTD &= ~(1 << LCD_RS);
+	LCD_CONTROL_PORTD &= ~(1 << LCD_RW);
 	_delay_ms(1);
 	LCD_DATA_PORTC = command;
 	LCD_CONTROL_PORTD |= (1 << LCD_E);
@@ -76,8 +82,28 @@ char getkey()
 	return key;
 }
 
-
 void char_to_string(char c, char *str) {
 	str[0] = c;
 	str[1] = '\0';
+}
+int string_to_int(char *str)
+{
+	int result = 0;
+	for (unsigned char i = 0; str[i] != '\0'; i++)
+	{
+		unsigned char digit = str[i] - '0';
+		result = result * 10 + digit;
+	}
+	return result;
+}
+
+void add_to_string(char a, char *str)
+{
+	unsigned char i = 0;
+	while(str[i] != '\0')
+	{
+		i++;
+	}
+	str[i] = a;
+	str[i+1] = '\0';
 }
