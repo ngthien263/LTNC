@@ -8,7 +8,8 @@ char keypad[6][4] = {
 					{'4', '5', '6', '*'},
 					{'1', '2', '3', '-'},
 					{'0', '.', '=', '+'}};
-
+int num[10];
+char op[10];
 void LCD_command(unsigned char command) {
 	LCD_CONTROL_PORTD &= ~(1 << LCD_RS);
 	LCD_CONTROL_PORTD &= ~(1 << LCD_RW);
@@ -58,6 +59,7 @@ void LCD_gotoxy(unsigned char x, unsigned char y) {
 void LCD_print(const char *str) {
 	while(*str) {
 		LCD_data(*str++);
+		_delay_ms(1);  // Add a small delay after each character
 	}
 }
 char getkey()
@@ -106,4 +108,48 @@ void add_to_string(char a, char *str)
 	}
 	str[i] = a;
 	str[i+1] = '\0';
+}
+
+uint32_t calculate(char *str)
+{
+	uint32_t result = 0;
+	unsigned char i = 0;
+	unsigned char j = 0;
+	while(str[i] != '\0')
+	{
+		if (str[i] >= '0' && str[i] <= '9')
+		{
+			result = result * 10 + (str[i] - '0');
+		}
+		else
+		{
+			num[j] = result;
+			op[j] = str[i];
+			j++;
+			result = 0;
+		}
+		i++;
+	}
+	num[j] = result;
+	result = num[0];
+	for(int k = 0; k < j; k++)
+	{
+		switch(op[k])
+		{
+			case '+':
+				result += num[k+1];
+				break;
+			case '-':
+				result -= num[k+1];
+				break;
+			case '*':
+				result *= num[k+1];
+				break;
+			case '/':
+				if (num[k+1] != 0)
+				result /= num[k+1];
+			break;
+		}
+	}
+	return result;
 }

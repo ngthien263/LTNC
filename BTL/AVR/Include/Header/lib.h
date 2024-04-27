@@ -18,6 +18,8 @@
 extern char rows_pin[6];
 extern char cols_pin[4];
 extern char keypad[6][4];
+extern int num[10];
+extern char op[10];
 void LCD_command(unsigned char command);
 void LCD_data(unsigned char data);
 void LCD_init() ;
@@ -28,5 +30,5 @@ char getkey();
 void char_to_string(char c, char *str);
 int string_to_int(char *str);
 void add_to_string(char a, char *str);
-
+uint32_t calculate(char *str);
 #endif /* LIB_H_ */
