@@ -118,7 +118,6 @@ void loop() {
     }
 }
 
-
 char getkey()
 {
   char key = '\0';
@@ -224,7 +223,6 @@ float calculate(char *str)
     return result;
 }
 
-
 void reverse(char* str) {
     unsigned char start = 0;
     unsigned char end1 = 0;
@@ -301,9 +299,6 @@ void db_to_string(float num, char *str)
       }
     str[i] = '\0'; 
 }
-
-
-
 
 void write2LCD(uint8_t bytes) {
   for (int i = 0; i < 4; i++) {
