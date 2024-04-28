@@ -17,7 +17,7 @@ float result;
 char num1[100];
 char key_str[100];
 char re_str[10];
-
+bool isReal;
 void setup() {
   Serial.begin(9600);
   pinMode(RSpin, OUTPUT);
@@ -60,20 +60,59 @@ void loop() {
         char_to_string(key, key_str);
         add_to_string(key, num1);
         LCD_str(key_str);
+        isReal = 1;
         break;
       case '.':
+        isReal = 1;
         char_to_string(key, key_str);
         add_to_string(key, num1);
         LCD_str(key_str);
         break;
      case '=':
         command2LCD(0xC0);
-        result = calculate(num1);
-        Serial.print(num1);
-        num_to_string(result, re_str);
-        Serial.print(result);
-        Serial.print(re_str);
-        LCD_str(re_str);
+        if(isReal == 0)
+        {
+          result = calculate(num1);
+          int_to_string(result, re_str);
+          LCD_str(re_str);
+        }
+        if(isReal == 1)
+        {
+          result = calculate(num1);
+          db_to_string(result, re_str);
+          LCD_str(re_str);
+        }
+        isReal = 0;    
+        break;
+     case 'c':
+        if(isReal == 0)
+        {
+          result--;
+          int_to_string(result, re_str);
+          LCD_str(re_str);
+        }
+        if(isReal == 1)
+        {
+          result--;
+          db_to_string(result, re_str);
+          LCD_str(re_str);
+        }
+        isReal = 0;    
+        break;
+     case 'd':
+        if(isReal == 0)
+        {
+          result++;
+          int_to_string(result, re_str);
+          LCD_str(re_str);
+        }
+        if(isReal == 1)
+        {
+          result++;
+          db_to_string(result, re_str);
+          LCD_str(re_str);
+        }
+        isReal = 0;    
         break;
       }
     }
@@ -202,9 +241,70 @@ void reverse(char* str) {
         end1--;
     }
 }
-void num_to_string(double num, char *str) {
-  dtostrf(num, 4, 2, str);
+void int_to_string(int num, char *str)
+{
+  bool isNegative = 0;
+  unsigned char i = 0;
+  if(num < 0)
+    {
+        isNegative = 1;
+        num = -num;
+    }
+  while (num != 0) 
+        {
+            int rem = (int)num % 10; 
+            str[i++] = rem + '0';
+            num = num / 10;
+        }
+    if(isNegative)
+        str[i++] = '-';
+    reverse(str);
 }
+void db_to_string(float num, char *str)
+{   
+    bool isNegative = 0;
+      unsigned char i = 0;
+      if(num < 0)
+        {
+            isNegative = 1;
+            num = -num;
+        }
+        int int_part = (int)num;
+        while(int_part != 0)
+        {
+            int rem = int_part % 10;
+            str[i++] = rem + '0';
+            int_part = int_part / 10;
+        }
+        if(num < 1)
+        {
+            str[i++] = '0';
+        }
+        if(isNegative)
+          str[i++] = '-';
+        reverse(str);
+        str[i++] = '.';
+        float decimal_part = num - (int)num;
+        for(unsigned char k = 0; k < 6; k++)
+        {
+            decimal_part *= 10;
+            int rem = (int)(decimal_part + 0.001);
+            str[i++] = rem + '0';
+            decimal_part -= rem;
+        }
+        for(unsigned char j = i - 1; j >= 0; j--)
+      {
+          if(str[j] == '0')
+              str[j] = '\0';
+          else
+              break;
+      }
+    str[i] = '\0'; 
+}
+
+
+
+
 void write2LCD(uint8_t bytes) {
   for (int i = 0; i < 4; i++) {
     digitalWrite(DATApin[i], (bytes >> i) & 0x01);
