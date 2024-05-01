@@ -55,9 +55,12 @@ void loop() {
         memory_sub();    
         break;
      case 'd':
+        memory_add();
         break;
-     case 232:
-        addkey(key);
+     case 'f':
+        LCD_clear();
+        square_root();
+
         break;
       }
     }

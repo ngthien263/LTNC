@@ -6,10 +6,10 @@ float num[5];
 char op[5];
 float result = 0.0;
 char num1[100];
-char key_str[100];
+char key_str[16];
 bool newkey = 0;
 bool isReal = 0;
-float last_res = 0.0;
+bool isEqual = 0;
 char getkey()
 {
   char key = '\0';
@@ -96,13 +96,12 @@ void addkey(char key)
   char_to_string(key, key_str);
   add_to_string(key, num1);
   LCD_str(key_str);
-  newkey = 1;
 }
 
 void equal()
 {
+  LCD_clear();
   char re_str[10];
-  command2LCD(0xC0);
   if(isReal == 0)
   {
     result = calculate(num1);
@@ -116,11 +115,12 @@ void equal()
     LCD_str(re_str);
   }
   isReal = 0;
-  num1[0] = '\0';
+  isEqual = 1;
 }
 
 void memory_sub()
 { 
+  float last_res;
   LCD_clear();
   char re_str[10];
   last_res = result;
@@ -133,16 +133,18 @@ void memory_sub()
   }
   if(isReal == 1)
   {
-    db_to_string((int)last_res, re_str);
+    db_to_string(last_res, re_str);
     LCD_str(re_str);
   }
   result = last_res;
   command2LCD(0x80);
   delay(1); 
+  num1[0] = '\0';
 }
 
 void memory_add()
 {
+  float last_res;
   LCD_clear();
   char re_str[10];
   last_res = result;
@@ -155,14 +157,25 @@ void memory_add()
   }
   if(isReal == 1)
   {
-    db_to_string((int)last_res, re_str);
+    db_to_string(last_res, re_str);
     LCD_str(re_str);
   }
   result = last_res;
   command2LCD(0x80);
   delay(1); 
+  num1[0] = '\0';
 }
-
+void square_root()
+{
+  float last_res;
+  char re_str[10];
+  last_res = sqrt(calculate(num1));
+  command2LCD(0x80);   
+  db_to_string(last_res, re_str);
+  LCD_str(re_str);
+  result = last_res;
+   delay(1); 
+}
 void cls()
 {
   command2LCD(0x01);
