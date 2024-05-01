@@ -18,4 +18,5 @@ char getkey();
 float calculate(char *str);
 void addkey(char key);
 void equal();
+void memory_sub();
 #endif 

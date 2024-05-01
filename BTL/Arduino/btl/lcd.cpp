@@ -32,6 +32,19 @@ void LCD_str(char *str) {
   }
 }
 
+void LCD_gotoxy(unsigned char x, unsigned char y) {
+  unsigned char address;
+  if(y != 1)
+  address = 0xC0 + x - 1;
+  else
+  address = 0x80 + x - 1;
+  command2LCD(address);
+  _delay_ms(2);
+}
+void LCD_clear() {
+ command2LCD(0x01); // xoa man hinh
+  _delay_ms(2);
+}
 void LCD_Init()
 {
   command2LCD(0x03);

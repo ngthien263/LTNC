@@ -25,6 +25,7 @@ void loop() {
   if (key >= '0' && key <= '9' )
     {   
       addkey(key);
+      
     }
     else 
     {
@@ -50,11 +51,10 @@ void loop() {
      case '=':
         equal();
         break;
-     case 'c':
-            
+     case 'c': 
+        memory_sub();    
         break;
      case 'd':
-        
         break;
      case 232:
         addkey(key);

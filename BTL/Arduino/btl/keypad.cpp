@@ -4,11 +4,12 @@ char cols_pin[4] = {13,12,11,10};
 extern char keypad[6][4];
 float num[5];
 char op[5];
-float result;
+float result = 0.0;
 char num1[100];
 char key_str[100];
-char re_str[10];
+bool newkey = 0;
 bool isReal = 0;
+float last_res = 0.0;
 char getkey()
 {
   char key = '\0';
@@ -95,10 +96,12 @@ void addkey(char key)
   char_to_string(key, key_str);
   add_to_string(key, num1);
   LCD_str(key_str);
+  newkey = 1;
 }
 
 void equal()
 {
+  char re_str[10];
   command2LCD(0xC0);
   if(isReal == 0)
   {
@@ -112,41 +115,52 @@ void equal()
     db_to_string(result, re_str);
     LCD_str(re_str);
   }
-  isReal = 0;    
+  isReal = 0;
+  num1[0] = '\0';
 }
 
 void memory_sub()
-{
+{ 
+  LCD_clear();
+  char re_str[10];
+  last_res = result;
+  last_res -= calculate(num1);
+  LCD_gotoxy(1,0);   
   if(isReal == 0)
   {
-    result--;
-    int_to_string(result, re_str);
+    int_to_string((int)last_res, re_str);
     LCD_str(re_str);
   }
   if(isReal == 1)
   {
-    result--;
-    db_to_string(result, re_str);
+    db_to_string((int)last_res, re_str);
     LCD_str(re_str);
   }
-  isReal = 0;
+  result = last_res;
+  command2LCD(0x80);
+  delay(1); 
 }
 
 void memory_add()
 {
+  LCD_clear();
+  char re_str[10];
+  last_res = result;
+  last_res += calculate(num1);
+  command2LCD(0xC0);   
   if(isReal == 0)
   {
-    result++;
-    int_to_string(result, re_str);
+    int_to_string((int)last_res, re_str);
     LCD_str(re_str);
   }
   if(isReal == 1)
   {
-    result++;
-    db_to_string(result, re_str);
+    db_to_string((int)last_res, re_str);
     LCD_str(re_str);
   }
-  isReal = 0;    
+  result = last_res;
+  command2LCD(0x80);
+  delay(1); 
 }
 
 void cls()

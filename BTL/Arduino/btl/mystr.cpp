@@ -45,20 +45,28 @@ void int_to_string(int num, char *str)
   bool isNegative = 0;
   unsigned char i = 0;
   if(num < 0)
+  {
+    isNegative = 1;
+    num = -num;
+  }
+  if(num == 0)
+  {
+    str[i++] = '0';
+  }
+  else
+  {
+    while (num != 0) 
     {
-        isNegative = 1;
-        num = -num;
+      int rem = (int)num % 10; 
+      str[i++] = rem + '0';
+      num = num / 10;
     }
-  while (num != 0) 
-        {
-            int rem = (int)num % 10; 
-            str[i++] = rem + '0';
-            num = num / 10;
-        }
-    if(isNegative)
-        str[i++] = '-';
-    reverse(str);
+  }
+  if(isNegative)
+    str[i++] = '-';
+  reverse(str);
 }
+
 void db_to_string(float num, char *str)
 {   
     bool isNegative = 0;
