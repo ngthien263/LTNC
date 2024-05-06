@@ -22,12 +22,18 @@ void setup() {
 
 void loop() {
   char key = getkey();
-  if (key >= '0' && key <= '9' )
-    {   
+  if ((key >= '0' && key <= '9') && (flag == 0) )
+  {   
       addkey(key);
-      
-    }
-    else 
+  }
+  else if ((key >= '0' && key <= '9') || (key == '-') && (flag == 1) )
+  {   
+      clearCharArray(num1);
+      LCD_clear();
+      addkey(key);
+      flag = 0;
+  }
+  else 
     {
       switch (key)
       {
@@ -56,6 +62,9 @@ void loop() {
         break;
      case 'b':
         memory_recall();
+        break;
+     case 'c':
+        memory_sub();
         break;
      case 'e':
         changeSign();

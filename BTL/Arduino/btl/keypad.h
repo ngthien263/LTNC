@@ -15,6 +15,7 @@ extern char num1[100];
 extern char key_str[16];
 extern char re_str[10];
 extern bool isReal;
+extern bool flag;
 char getkey();
 float calculate(char *str);
 void addkey(char key);
@@ -26,4 +27,5 @@ void changeSign();
 void Percentage();
 void memory_recall();
 void memory_clear();
+void memory_sub();
 #endif 

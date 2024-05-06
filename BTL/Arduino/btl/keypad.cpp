@@ -10,6 +10,7 @@ char key_str[16];
 bool newkey = 0;
 bool isReal = 0;
 bool isEqual = 0;
+bool flag = 0;
 char getkey()
 {
   char key = '\0';
@@ -119,21 +120,33 @@ void equal()
 
 void memory_sub()
 { 
-
+  float memory = result;
+  float addNumb = string_to_float(num1);
+  clearCharArray(num1);
+  result = memory - addNumb;
+  db_to_string(result, num1);
+  LCD_clear();
+  LCD_str(num1);
+  flag = 1;
 }
 
 void memory_add()
 {
-  
+  float memory = result;
+  float addNumb = string_to_float(num1);
+  clearCharArray(num1);
+  result = memory + addNumb;
+  db_to_string(result, num1);
+  LCD_clear();
+  LCD_str(num1);
+  flag = 1;
 }
 void square_root()
 {
   result = string_to_float(num1);
   if(string_to_float(num1) >= 0){
     result = sqrt(result);
-    Serial.print(num1);
     clearCharArray(num1);
-    Serial.print(result);
     db_to_string(result, num1);
     LCD_clear();
     LCD_str(num1);
@@ -143,15 +156,31 @@ void square_root()
     LCD_clear();
     LCD_str("Error");
   }
+  flag = 1;
 }
 void changeSign()
 {
-  result = string_to_float(num1);
-  result = -result;
-  clearCharArray(num1);
-  db_to_string(result, num1);
-  LCD_clear();
-  LCD_str(num1);
+  if(!isReal)
+  {
+    result = string_to_int(num1);
+    Serial.print(result);
+    result = -result;
+    Serial.print(result);
+    clearCharArray(num1);
+    int_to_string(result, num1);
+    LCD_clear();
+    LCD_str(num1);
+  }
+  else
+  {
+    result = string_to_float(num1);
+    result = -result;
+    clearCharArray(num1);
+    db_to_string(result, num1);
+    LCD_clear();
+    LCD_str(num1);
+  }
+  flag = 1;
 }
 void Percentage()
 {
@@ -161,6 +190,7 @@ void Percentage()
   db_to_string(result, num1);
   LCD_clear();
   LCD_str(num1);
+  flag = 1;
 }
 void memory_recall()
 {
@@ -169,11 +199,15 @@ void memory_recall()
   clearCharArray(num1);
   db_to_string(result, num1);
   LCD_str(num1);
+  flag = 1;
 }
 void memory_clear()
 {
+  LCD_clear();
+  result = 0;
   clearCharArray(num1);
   LCD_str("Memory Cleared");
+  flag = 1;
 }
 void cls()
 {

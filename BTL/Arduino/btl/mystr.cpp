@@ -7,12 +7,15 @@ int string_to_int(char *str)
 {
   int result = 0;
   bool isNegative = false;
+  unsigned char start = 0;
+  
   if (str[0] == '-')
   {
     isNegative = true;
+    start = 1;
   }
 
-  for (unsigned char i = 1; str[i] != '\0'; i++)
+  for (unsigned char i = start; str[i] != '\0'; i++)
   {
     unsigned char digit = str[i] - '0';
     result = result * 10 + digit;
