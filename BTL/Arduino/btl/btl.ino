@@ -51,16 +51,21 @@ void loop() {
      case '=':
         equal();
         break;
-     case 'c': 
-        memory_sub();    
+     case 'a': 
+        memory_clear();    
         break;
-     case 'd':
-        memory_add();
+     case 'b':
+        memory_recall();
+        break;
+     case 'e':
+        changeSign();
+        break;
+     case '%':
+        Percentage();
         break;
      case 'f':
         LCD_clear();
         square_root();
-
         break;
       }
     }

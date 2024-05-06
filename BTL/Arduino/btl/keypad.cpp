@@ -3,7 +3,7 @@ char rows_pin[6] = {A0,A1,A2,A3,A4,A5};
 char cols_pin[4] = {13,12,11,10};
 extern char keypad[6][4];
 float num[5];
-char op[5];
+char op;
 float result = 0.0;
 char num1[100];
 char key_str[16];
@@ -35,11 +35,11 @@ char getkey()
 
 float calculate(char *str)
 {
-    float result = 0;
     unsigned char i = 0;
     unsigned char j = 0;
     bool isDecimal = 0;
     float decimal = 1.0;
+    float result = 0.0;
     while (str[i] != '\0')
     {
         if (str[i] >= '0' && str[i] <= '9')
@@ -59,7 +59,7 @@ float calculate(char *str)
         else
         {
             num[j] = result;
-            op[j] = str[i];
+            op = str[i];
             j++;
             result = 0.0;
             isDecimal = 0;
@@ -68,28 +68,26 @@ float calculate(char *str)
         i++;
     }
     num[j] = result;
-    result = num[0];
-    for(int k = 0; k < j; k++)
+    switch(op)
     {
-        switch(op[k])
-        {
-            case '+':
-                result += num[k+1];
-                break;
-            case '-':
-                result -= num[k+1];
-                break;
-            case '*':
-                result *= num[k+1];
-                break;
-            case '/':
-                if (num[k+1] != 0)
-                    result /= num[k+1];
-                break;
-        }
+       case '+':
+           result = num[0] + num[1];
+           break;
+       case '-':
+           result = num[0] - num[1];
+           break;
+       case '*':
+           result = num[0] * num[1];
+           break;
+       case '/':
+           if (num[1] != 0)
+               result = num[0] / num[1];
+           break;
     }
     return result;
 }
+
+
 
 void addkey(char key)
 {
@@ -105,76 +103,77 @@ void equal()
   if(isReal == 0)
   {
     result = calculate(num1);
-    int_to_string(result, re_str);
-    LCD_str(re_str);
+    clearCharArray(num1);
+    int_to_string(result, num1);
+    LCD_str(num1);
   }
   if(isReal == 1)
-  {
+  { 
     result = calculate(num1);
-    db_to_string(result, re_str);
-    LCD_str(re_str);
+    clearCharArray(num1);
+    db_to_string(result, num1);
+    LCD_str(num1);
   }
-  isReal = 0;
   isEqual = 1;
 }
 
 void memory_sub()
 { 
-  float last_res;
-  LCD_clear();
-  char re_str[10];
-  last_res = result;
-  last_res -= calculate(num1);
-  LCD_gotoxy(1,0);   
-  if(isReal == 0)
-  {
-    int_to_string((int)last_res, re_str);
-    LCD_str(re_str);
-  }
-  if(isReal == 1)
-  {
-    db_to_string(last_res, re_str);
-    LCD_str(re_str);
-  }
-  result = last_res;
-  command2LCD(0x80);
-  delay(1); 
-  num1[0] = '\0';
+
 }
 
 void memory_add()
 {
-  float last_res;
-  LCD_clear();
-  char re_str[10];
-  last_res = result;
-  last_res += calculate(num1);
-  command2LCD(0xC0);   
-  if(isReal == 0)
-  {
-    int_to_string((int)last_res, re_str);
-    LCD_str(re_str);
-  }
-  if(isReal == 1)
-  {
-    db_to_string(last_res, re_str);
-    LCD_str(re_str);
-  }
-  result = last_res;
-  command2LCD(0x80);
-  delay(1); 
-  num1[0] = '\0';
+  
 }
 void square_root()
 {
-  float last_res;
-  char re_str[10];
-  last_res = sqrt(calculate(num1));
-  command2LCD(0x80);   
-  db_to_string(last_res, re_str);
-  LCD_str(re_str);
-  result = last_res;
-   delay(1); 
+  result = string_to_float(num1);
+  if(string_to_float(num1) >= 0){
+    result = sqrt(result);
+    Serial.print(num1);
+    clearCharArray(num1);
+    Serial.print(result);
+    db_to_string(result, num1);
+    LCD_clear();
+    LCD_str(num1);
+  }
+  else
+  {
+    LCD_clear();
+    LCD_str("Error");
+  }
+}
+void changeSign()
+{
+  result = string_to_float(num1);
+  result = -result;
+  clearCharArray(num1);
+  db_to_string(result, num1);
+  LCD_clear();
+  LCD_str(num1);
+}
+void Percentage()
+{
+  result = string_to_float(num1);
+  result = result/100;
+  clearCharArray(num1);
+  db_to_string(result, num1);
+  LCD_clear();
+  LCD_str(num1);
+}
+void memory_recall()
+{
+  LCD_clear();
+  float memory = result;
+  clearCharArray(num1);
+  db_to_string(result, num1);
+  LCD_str(num1);
+}
+void memory_clear()
+{
+  clearCharArray(num1);
+  LCD_str("Memory Cleared");
 }
 void cls()
 {
@@ -182,10 +181,9 @@ void cls()
   for(int i = 0; i < 5; i++) {
     num[i] = 0.0;
   }
-  op[0] = '\0';
   result = 0.0;
-  num1[0] = '\0';
-  key_str[0] = '\0';
-  re_str[0] = '\0';
+  clearCharArray(num1);
+  clearCharArray(key_str);
+  clearCharArray(re_str);
   isReal = 0;
 }

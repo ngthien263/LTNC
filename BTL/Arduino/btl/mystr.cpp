@@ -6,14 +6,23 @@ void char_to_string(char c, char *str) {
 int string_to_int(char *str)
 {
   int result = 0;
-  for (unsigned char i = 0; str[i] != '\0'; i++)
+  bool isNegative = false;
+  if (str[0] == '-')
+  {
+    isNegative = true;
+  }
+
+  for (unsigned char i = 1; str[i] != '\0'; i++)
   {
     unsigned char digit = str[i] - '0';
     result = result * 10 + digit;
   }
+  if (isNegative)
+  {
+    result = -result;
+  }
   return result;
 }
-
 void add_to_string(char a, char *str)
 {
   unsigned char i = 0;
@@ -40,7 +49,7 @@ void reverse(char* str) {
         end1--;
     }
 }
-void int_to_string(int num, char *str)
+void int_to_string(int32_t num, char *str)
 {
   bool isNegative = 0;
   unsigned char i = 0;
@@ -57,7 +66,7 @@ void int_to_string(int num, char *str)
   {
     while (num != 0) 
     {
-      int rem = (int)num % 10; 
+      int32_t rem = (int32_t)num % 10; 
       str[i++] = rem + '0';
       num = num / 10;
     }
@@ -67,7 +76,7 @@ void int_to_string(int num, char *str)
   reverse(str);
 }
 
-void db_to_string(float num, char *str)
+void db_to_string(double num, char *str)
 {   
     bool isNegative = 0;
       unsigned char i = 0;
@@ -76,11 +85,11 @@ void db_to_string(float num, char *str)
             isNegative = 1;
             num = -num;
         }
-        int int_part = (int)num;
+        uint32_t int_part = (uint32_t)num;
         while(int_part != 0)
         {
-            int rem = int_part % 10;
-            str[i++] = rem + '0';
+            uint32_t rem1 = int_part % 10;
+            str[i++] = rem1 + '0';
             int_part = int_part / 10;
         }
         if(num < 1)
@@ -107,4 +116,13 @@ void db_to_string(float num, char *str)
               break;
       }
     str[i] = '\0'; 
+}
+void clearCharArray(char* str) {
+    for(int i = 0; str[i] != '\0'; i++) {
+        str[i] = '\0';
+    }
+}
+float string_to_float(char* str) {
+    float result = atof(str);
+    return result;
 }
