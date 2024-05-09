@@ -83,6 +83,8 @@ float calculate(char *str)
        case '/':
            if (num[1] != 0)
                result = num[0] / num[1];
+           else
+              LCD_str("Divided by 0");
            break;
     }
     return result;
@@ -113,6 +115,7 @@ void equal()
     result = calculate(num1);
     clearCharArray(num1);
     db_to_string(result, num1);
+    checknum(result);
     LCD_str(num1);
   }
   isEqual = 1;
@@ -148,8 +151,10 @@ void square_root()
     result = sqrt(result);
     clearCharArray(num1);
     db_to_string(result, num1);
+    checknum(result);
     LCD_clear();
     LCD_str(num1);
+    
   }
   else
   {
@@ -177,6 +182,7 @@ void changeSign()
     result = -result;
     clearCharArray(num1);
     db_to_string(result, num1);
+    checknum(result);
     LCD_clear();
     LCD_str(num1);
   }
@@ -198,6 +204,7 @@ void memory_recall()
   float memory = result;
   clearCharArray(num1);
   db_to_string(result, num1);
+  checknum(result);
   LCD_str(num1);
   flag = 1;
 }
@@ -218,6 +225,13 @@ void cls()
   result = 0.0;
   clearCharArray(num1);
   clearCharArray(key_str);
-  clearCharArray(re_str);
   isReal = 0;
+}
+
+void checknum(float n)
+{
+  if(n - int32_t(n) == 0)
+  {
+    num1[strlen(num1) - 1] = '\0';
+  }
 }

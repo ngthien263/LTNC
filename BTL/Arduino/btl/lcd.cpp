@@ -42,7 +42,7 @@ void LCD_gotoxy(unsigned char x, unsigned char y) {
   _delay_ms(2);
 }
 void LCD_clear() {
- command2LCD(0x01); // xoa man hinh
+ command2LCD(0x01); 
   _delay_ms(2);
 }
 void LCD_Init()
@@ -50,6 +50,6 @@ void LCD_Init()
   command2LCD(0x03);
   command2LCD(0x02);
   command2LCD(0x28); 
-  command2LCD(0x0E);
+  command2LCD(0x0C);
   command2LCD(0x80);
 }
