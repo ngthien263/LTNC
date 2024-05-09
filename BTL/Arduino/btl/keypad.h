@@ -27,4 +27,5 @@ void memory_recall();
 void memory_clear();
 void memory_sub();
 void checknum(float n);
+void clear_last();
 #endif 

@@ -235,3 +235,10 @@ void checknum(float n)
     num1[strlen(num1) - 1] = '\0';
   }
 }
+
+void clear_last()
+{
+   num1[strlen(num1) - 1] = '\0';
+   LCD_clear();
+   LCD_str(num1);
+}

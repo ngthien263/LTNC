@@ -76,6 +76,9 @@ void loop() {
         LCD_clear();
         square_root();
         break;
+     case 'C':
+        clear_last();
+        break;
       }
     }
 }
