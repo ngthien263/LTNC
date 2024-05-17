@@ -17,20 +17,22 @@ char getkey()
   for(int i = 0; i < 4; i++)
   {
     pinMode(cols_pin[i], OUTPUT);
-    digitalWrite(cols_pin[i], 1);
+    digitalWrite(cols_pin[i], 0);
     for(int j = 0; j < 6; j++)
     {
-      pinMode(rows_pin[j], INPUT);
+      pinMode(rows_pin[j], INPUT_PULLUP);
       if((digitalRead(rows_pin[j])))
       {
         key = keypad[j][i];
         while((digitalRead(rows_pin[j])));
       }
     }
-    digitalWrite(cols_pin[i], LOW);
+    digitalWrite(cols_pin[i], 1);
   }
   return key;
 }
+
+
 
 
 
